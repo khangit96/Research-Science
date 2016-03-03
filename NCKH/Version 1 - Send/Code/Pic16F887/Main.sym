@@ -1,0 +1,209 @@
+004-005 @READ_PROGRAM_MEMORY8.P1
+004     @WRITE_PROGRAM_MEMORY8.P2
+015     CCP_1_LOW
+015     CCP_1_HIGH
+015     CCP_1
+01B     CCP_2_HIGH
+01B     CCP_2
+01B     CCP_2_LOW
+020     @INTERRUPT_AREA
+021     @INTERRUPT_AREA
+022     @INTERRUPT_AREA
+023     @INTERRUPT_AREA
+024     @INTERRUPT_AREA
+025     @INTERRUPT_AREA
+026     @INTERRUPT_AREA
+027     @INTERRUPT_AREA
+028     c
+029     c1
+02A     c2
+02B     c3
+02C     c4
+02D     new_sms
+02E     i
+02F     j
+030     k
+031     index
+032     interrupt
+033     status
+034-037 st
+038     @TRIS_C
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+07B     @SCRATCH
+07F     @INTERRUPT_AREA
+0FF     @INTERRUPT_AREA
+107.6   C1OUT
+108.6   C2OUT
+10D-10E @WRITE_PROGRAM_MEMORY8.P1
+10D-10E @READ_PROGRAM_MEMORY8.P2
+110-169 sms
+16A     lcd_init.i
+16A     _Turn_On_All.i
+16A     _Turn_Off_All.i
+16A     _Delete_SMS.@SCRATCH1
+16A     _Waiting_SIM.@SCRATCH1
+16A     _Status_2.@SCRATCH1
+16A     _Status_4.@SCRATCH1
+16B     lcd_init.@SCRATCH1
+16B     _Turn_Off_All.@SCRATCH1
+16B     _Turn_On_All.@SCRATCH1
+16C     _Turn_Off_All.@SCRATCH2
+16C     _Turn_On_All.@SCRATCH2
+17F     @INTERRUPT_AREA
+190     _Response.style
+190     _Reset_SMS.k
+190     _Send_SMS.style
+190     MAIN.@SCRATCH1
+190     _Configuration_Sim.@SCRATCH1
+190     _Status_1.@SCRATCH1
+190     _Status_3.@SCRATCH1
+191     MAIN.@SCRATCH2
+191     _Reset_SMS.@SCRATCH1
+191     _Response.@SCRATCH1
+191     _Send_SMS.@SCRATCH1
+192     _Turn_On.name
+192     _Turn_Off.name
+192     MAIN.@SCRATCH3
+192     _Reset_SMS.@SCRATCH2
+193     _Turn_On.delay
+193     _Turn_Off.delay
+193     MAIN.@SCRATCH4
+194     _Delay.n
+194     MAIN.@SCRATCH5
+195     _Delay.i
+195     MAIN.@SCRATCH6
+196     MAIN.@SCRATCH7
+197     MAIN.@SCRATCH8
+198     MAIN.@SCRATCH9
+199     MAIN.@SCRATCH10
+19A     MAIN.@SCRATCH11
+19B     MAIN.@SCRATCH12
+19C     MAIN.@SCRATCH13
+19D     MAIN.@SCRATCH14
+19E     lcd_putc.c
+19E     MAIN.@SCRATCH15
+19F     @delay_ms2.P1
+19F     lcd_gotoxy.x
+19F     MAIN.@SCRATCH16
+1A0     lcd_gotoxy.y
+1A0     MAIN.@SCRATCH17
+1A1     lcd_gotoxy.address
+1A1     MAIN.@SCRATCH18
+1A2     lcd_gotoxy.@SCRATCH1
+1A2     MAIN.@SCRATCH19
+1A3     lcd_send_byte.address
+1A3     MAIN.@SCRATCH20
+1A4     lcd_send_byte.n
+1A4     MAIN.@SCRATCH21
+1A5     lcd_read_byte.low
+1A5     lcd_send_byte.@SCRATCH1
+1A5     MAIN.@SCRATCH22
+1A6     lcd_send_nibble.n
+1A6     lcd_read_byte.high
+1A7     lcd_read_nibble.n
+1A7     lcd_read_byte.@SCRATCH1
+1A8     lcd_read_nibble.@SCRATCH1
+1A9     RDA_isr.@SCRATCH1
+1AA     RDA_isr.@SCRATCH2
+1AB     RDA_isr.@SCRATCH3
+1FF     @INTERRUPT_AREA
+27F     @INTERRUPT_AREA
+2FF     @INTERRUPT_AREA
+37F     @INTERRUPT_AREA
+3FF     @INTERRUPT_AREA
+47F     @INTERRUPT_AREA
+4FF     @INTERRUPT_AREA
+57F     @INTERRUPT_AREA
+5FF     @INTERRUPT_AREA
+67F     @INTERRUPT_AREA
+6FF     @INTERRUPT_AREA
+77F     @INTERRUPT_AREA
+7FF     @INTERRUPT_AREA
+
+ROM Allocation:
+0272  @delay_ms2
+0035  LCD_INIT_STRING
+0407  lcd_init
+030C  lcd_read_byte
+02CC  lcd_read_nibble
+0309  lcd_send_byte
+0287  lcd_send_nibble
+0374  lcd_gotoxy
+039B  lcd_putc
+01E6  RDA_isr
+0860  MAIN
+003D  @const266
+005B  @const267
+0079  @const268
+0092  @const269
+00AE  @const270
+00C6  @const271
+00E5  @const272
+0106  @const273
+0679  _Delete_SMS
+0122  @const275
+04DE  _Reset_SMS
+0693  _Response
+0134  @const277
+0150  @const280
+05BF  _Send_SMS
+0169  @const282
+0191  @const284
+03D8  _Delay
+045A  _Waiting_SIM
+019B  @const286
+01AA  @const287
+01BA  @const288
+01CB  @const289
+0800  _Turn_Off
+0770  _Turn_On
+03FA  _Startup
+0581  _Configuration_Sim
+01DD  @const293
+04FF  _Display
+03EB  _Blank
+063D  _Status_1
+064C  _Status_2
+065B  _Status_3
+066A  _Status_4
+0230  _Turn_Off_All
+072D  _Turn_On_All
+0860  @cinit
+
+
+User Memory space: 
+
+Project Directory:
+    E:\My Project\Sim900\Version 1 - Send\Code\Pic16F887\
+
+Project Files:
+    Main.c
+    C:\Program Files\PICC\devices\16F887.h
+    lcd.h
+    C:\Program Files\PICC\drivers\math.h
+
+Units:
+    Main.c (main)
+
+Compiler Settings:
+    Processor:      PIC16F887
+    Pointer Size:   16
+    ADC Range:      0-255
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    Errors:      Main.err
+    Ext Symbols: Main.esym
+    INHX8:       Main.hex
+    Symbols:     Main.sym
+    List:        Main.lst
+    Debug/COFF:  Main.cof
+    Project:     Main.PJT
+    Call Tree:   Main.tre
+    Statistics:  Main.sta
