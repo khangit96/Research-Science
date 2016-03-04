@@ -17,22 +17,22 @@ SoftwareSerial SIM900(2,3);
 #include "sms.h"
 SMSGSM sms;
 char smsbuffer[160]; //biến tin nhắn nhận
-char n[20]="+84902581349"; //SĐT người gửi - chủ
+char n[20]="+841665002831"; //SĐT người gửi - chủ
 char pos; //biến vị trí tin nhắn trong sim
 char *p; //biến lệnh của người gửi
-#define Led 12
+#define Led 11
 //Độ ẩm đất
-/*#define Analog 5
-#define Digital 0
-#define Relay1 11
-#define Relay2 8
+#define Analog 1
+#define Digital 7
+//#define Relay1 11
+//#define Relay2 8
 //mặc định độ ẩm đất là 500
 
 //Độ ẩm không khí-nhiệt độ
 #include "DHT.h"       // Gọi thư viện DHT11(độ ẩm đất-độ ẩm ko khí
 const int DHTPIN = 1;       //Đọc dữ liệu từ DHT11 ở chân 2 trên mạch Arduino
 const int DHTTYPE = DHT11;  //Khai báo loại cảm biến, có 2 loại là DHT11 và DHT22
-DHT dht(DHTPIN, DHTTYPE);*/
+//DHT dht(DHTPIN, DHTTYPE);*/
 int doAmDatCanTuoi=500;
 
 /*****************************************************************************HÀM CÀI ĐẶT**************************************************************************/
@@ -128,9 +128,9 @@ void loop()
  // XuatLCD();
  
   //LấyGiá trị độ ẩm đất
- /*int doAmDat=analogRead(Analog);
- int kiemTraDoAmDat=digitalRead(Digital);//nếu có độ ẩm đất thì kiemTraDoAmDat=1 và ngược lại thì kiemTraDoAmDat=0
- 
+ //int doAmDat=analogRead(Analog);
+ //int kiemTraDoAmDat=digitalRead(Digital);//nếu có độ ẩm đất thì kiemTraDoAmDat=1 và ngược lại thì kiemTraDoAmDat=0
+ /*
 //Lấy giá trị độ ẩm không khí-nhiệt độ không khí
   int doAmKhongKhi = dht.readHumidity();    //Đọc độ ẩm không khí
   int nhietDoKhongKhi = dht.readTemperature(); //Đọc nhiệt độ không khí*/
@@ -146,7 +146,7 @@ void loop()
     if(p)//nếu mà nội dung tin nhắn là STATUS 
     {
       //sms.SendSMS(n, Reply(doAmDat,doAmKhongKhi,nhietDoKhongKhi));//thì gửi lại thông tin cho người dùng
-      sms.SendSMS(n, Reply(12,23,65));
+      sms.SendSMS(n, Reply(56,23,65));
       Serial.println("send ok!");
     }
     else//ngược lại nếu nội dung tin nhắn ko phải là STATUS
@@ -163,15 +163,19 @@ void loop()
                 p=strstr(smsbuffer,"CHANGE");//thì tìm kiếm chuổi CHANGE trong nội dung tin nhắn dùng để thay đổi nhiệt độ
               if(p)//nếu mà nội dung tin nhắn là CHANGE 
               {  
-                int length=sizeof(smsbuffer);//lấy độ dài của chuổi tin nhắn
-                char changeNhietDo[30];//biến để lấy ra giá trị nhiệt độ từ nội dung tin nhắn thay đổi nhiệt độ
-                strncpy(changeNhietDo,smsbuffer+8,length-8);//cắt giá trị nhiệt độ từ trong nội dung chuổi tin nhắn
-                doAmDatCanTuoi=(int)changeNhietDo;//gán doAmDatCanTuoi bằng với giá trị nhiệt độ cần thay đổi trong nội dung tin nhắn
-                Serial.print("Do am can tuoi: ");
+                
+            //    int length=sizeof(smsbuffer);//lấy độ dài của chuổi tin nhắn
+
+            int Length=sizeof(smsbuffer);//lấy độ dài của chuổi tin nhắn
+                char changeNhietDo[163]="\0";//biến để lấy ra giá trị nhiệt độ từ nội dung tin nhắn thay đổi nhiệt độ
+               strncpy(changeNhietDo,smsbuffer+7,3);//cắt giá trị nhiệt độ từ trong nội dung chuổi tin nhắn
+                doAmDatCanTuoi=atoi(changeNhietDo);//gán doAmDatCanTuoi bằng với giá trị nhiệt độ cần thay đổi trong nội dung tin nhắn
+             //   Serial.print(Length);
                 Serial.println(doAmDatCanTuoi);
-               // digitalWrite(Relay1,HIGH);
-                delay(9000);
-                //digitalWrite(Relay1,LOW);
+               // digitalWrite(Led,HIGH);
+                // sms.SendSMS(n, Reply(Length,23,65));
+                delay(10000);
+                //digitalWrite(Led,LOW);
               }
          }
     }
