@@ -51,17 +51,17 @@ char *Reply(int Doamdat,int Doamkhongkhi,int Nhietdo)
   return result;
 }
 /**********************************************************/
- int Check()
+ int DO_AM_DAT()
 {
   int doAmDat=analogRead(Analog);
   return doAmDat;
 }
- int Check1()
+ int DO_AM_KHONG_KHI()
 {
   int h=dht.readHumidity();
   return h;
 }
- int Check2()
+ int NHIET_DO_KHONG_KHI()
 {
   int t=dht.readTemperature();
   return t;
@@ -79,7 +79,7 @@ void loop()
     if(p)//nếu mà nội dung tin nhắn là STATUS 
     {
       //sms.SendSMS(n, Reply(doAmDat,doAmKhongKhi,nhietDoKhongKhi));//thì gửi lại thông tin cho người dùng
-      sms.SendSMS(n, Reply(Check(),Check1(),Check2()));
+      sms.SendSMS(n, Reply(DO_AM_DAT(),DO_AM_KHONG_KHI(),NHIET_DO_KHONG_KHI()));
       Serial.println("send ok!");
     }
     else//ngược lại nếu nội dung tin nhắn ko phải là STATUS
@@ -87,7 +87,15 @@ void loop()
           p=strstr(smsbuffer,"WATERING");//thì tìm kiếm chuổi WATERING trong nội dung tin nhắn
           if(p)//nếu mà nội dung tin nhắn là WATERING 
           {
-             digitalWrite(13,HIGH);
+            if(DO_AM_DAT()>500)//mỗi lần muốn tưới phải kiểm tra xem độ ẩm có lớn hơn 500 chưa(tức là đất phải khô mới tưới)
+            {
+                digitalWrite(13,HIGH);
+            }
+            else
+            {
+              //sẽ gửi tin nhắn về cho người dùng thông báo rằng ko tưới đk vì đất còn ướt
+            }
+           
           }
           else//ngược lại nếu nội dung tin nhắn ko phải là WATERING
           {
@@ -104,5 +112,13 @@ void loop()
               }
          }
     }
+    if(DO_AM_DAT()>500)//mỗi lần muốn tưới phải kiểm tra xem độ ẩm có lớn hơn 500 chưa(tức là đất phải khô mới tưới)
+       {
+        digitalWrite(13,HIGH);
+       }
+   else
+       {
+              
+       }
     delay(1000);
 }
