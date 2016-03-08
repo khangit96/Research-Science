@@ -50,6 +50,13 @@ char *Reply(int Doamdat,int Doamkhongkhi,int Nhietdo)
   strcat(result,"*C");
   return result;
 }
+//Hàm trả tin nhắn cho người dùng khi không tưới đk
+char *Reply1()
+{  
+  char content[50]="Khong the tuoi duoc ";
+  return content;
+}
+
 /**********************************************************/
  int DO_AM_DAT()
 {
@@ -91,9 +98,10 @@ void loop()
             {
                 digitalWrite(13,HIGH);
             }
-            else
+            else//ngược lại
             {
-              //sẽ gửi tin nhắn về cho người dùng thông báo rằng ko tưới đk vì đất còn ướt
+              Reply1(); //sẽ gửi tin nhắn về cho người dùng thông báo rằng ko tưới đk vì đất còn ướt
+             
             }
            
           }
