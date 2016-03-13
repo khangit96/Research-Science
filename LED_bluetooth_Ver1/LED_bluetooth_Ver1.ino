@@ -1,6 +1,6 @@
 int count=0;
-String test;
 char command;
+String test;
 #define led 4
 void setup() {
   Serial.begin(9600);
@@ -8,29 +8,29 @@ void setup() {
 }
 
 void loop()
-{ 
+{  
+
     while(Serial.available() > 0)
      {
        command = ((byte)Serial.read());
        test += command;
        
-       delay(1);
+       delay(100);
      }
      if(test=="TURN ON")
      {
        digitalWrite(led,HIGH);
-       Serial.print("S");
+       Serial.print("O");
        test="";
-      command='\0';
+       command='\0';
      }
      if(test=="TURN OFF")
      {
        digitalWrite(led,LOW); 
-       Serial.print("D");
+       Serial.print("F");
         test="";
         command='\0';
      }
  
   delay(1000);
 }
-

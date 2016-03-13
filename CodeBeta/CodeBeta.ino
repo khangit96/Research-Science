@@ -53,7 +53,7 @@ char *Reply(int Doamdat,int Doamkhongkhi,int Nhietdo)
 //Hàm trả tin nhắn cho người dùng khi không tưới đk
 char *Reply1()
 {  
-  char content[50]="Khong the tuoi duoc ";
+  char content[50]="Khong the tuoi duoc vi dat con kho";
   return content;
 }
 
