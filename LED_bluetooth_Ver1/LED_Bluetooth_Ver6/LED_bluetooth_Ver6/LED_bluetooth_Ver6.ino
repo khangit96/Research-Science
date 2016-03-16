@@ -1,4 +1,6 @@
-
+#define chanphat 7
+#define chanthu 8
+int thoigian,khoangcach;
 #include<stdlib.h>
 #include <string.h>
 int count=0;
@@ -9,9 +11,12 @@ boolean check=false;
 #define Analog3 3
 int count1;
 
+
 void setup() {
   Serial.begin(9600);
   pinMode(led,OUTPUT);
+  pinMode(chanphat, OUTPUT);
+  pinMode(chanthu, INPUT);
 }
 
 void loop()
@@ -31,7 +36,7 @@ void loop()
        check=true; 
        digitalWrite(led,HIGH); 
        test="";
-       convertIntToChar(12346);
+      // convertIntToChar(12346);
        command='\0';
      }
      if(test=="TURN OFF")
@@ -39,30 +44,27 @@ void loop()
        
         digitalWrite(led,LOW); 
         test="";
-        convertIntToChar(12345);
+        //convertIntToChar(12345);
         command='\0';
      }
     
-    
      //nếu như người dùng đã nhấn vào nút bắt đầu bên smartphone
-   /*  if(check==true)
+     if(check==true)
      {
-          //KẾT HỢP QUANG TRỞ
-        int value= analogRead(Analog3);
-        delay(2000);
-        if(value>=300)
-        {
-           //convertIntToChar(12346);
-           Serial.print("1");
-          digitalWrite(led,HIGH);
-        }
-        else if(value<=150)
-        { 
-          //convertIntToChar(12345);
-           Serial.print("2");
-          digitalWrite(led,LOW);
-        }
-  } */
+          //CẢM BIẾN SIÊU Âm
+         //int  camBienSieuAm=CamBienSieuAm();
+         //convertIntToChar(camBienSieuAm);
+        
+          //delay(500);
+          digitalWrite(chanphat,HIGH);
+          delayMicroseconds(1000);
+          digitalWrite(chanphat,LOW);
+          thoigian=pulseIn(chanthu,HIGH);
+          khoangcach=0.0344*(thoigian/2);
+          convertIntToChar(khoangcach);
+      }
+   
+  
   delay(1000);
 }
 
@@ -96,3 +98,15 @@ void convertIntToChar(int number)
      }
 }
 
+//Cảm biến siêu âm
+int CamBienSieuAm()
+{
+  int KHOANG_CACH;
+digitalWrite(chanphat,HIGH);
+delayMicroseconds(1000);
+digitalWrite(chanphat,LOW);
+thoigian=pulseIn(chanthu,HIGH);
+KHOANG_CACH=0.0344*(thoigian/2);
+return KHOANG_CACH;
+delay(500); 
+}
