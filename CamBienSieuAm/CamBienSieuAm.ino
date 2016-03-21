@@ -16,16 +16,22 @@ delayMicroseconds(1000);
 digitalWrite(chanphat,LOW);
 thoigian=pulseIn(chanthu,HIGH);
 khoangcach=0.0344*(thoigian/2);
+
 Serial.print(khoangcach);
 Serial.println("cm");
-if(khoangcach>5&&khoangcach<15)
+if(khoangcach==16||khoangcach==17)
 {
-  digitalWrite(led,HIGH);
-  delay(3000);
+  
+ Serial.println("0ml");
 }
 else
 {
-  digitalWrite(led,LOW);
+  int khoangcach_fix=17-khoangcach;
+  int ml=(khoangcach_fix*500)/14;
+  Serial.println(ml);
 }
-delay(500);
+
+
+
+delay(200);
 }

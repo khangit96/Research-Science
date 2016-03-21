@@ -49,17 +49,49 @@ void loop()
      if(check==true)
      {
           //CẢM BIẾN SIÊU Âm
-         //int  camBienSieuAm=CamBienSieuAm();
-         //convertIntToChar(camBienSieuAm);
-        
-          //delay(500);
+   
          digitalWrite(chanphat,HIGH);
-        delayMicroseconds(1000);
-        digitalWrite(chanphat,LOW);
-       int thoi_gian=pulseIn(chanthu,HIGH);
-       int khoang_cach=0.0344*(thoi_gian/2);
-       //convertIntToChar(khoang_cach);
-       Serial.print(khoang_cach);
+         delayMicroseconds(1000);
+         digitalWrite(chanphat,LOW);
+         int thoi_gian=pulseIn(chanthu,HIGH);
+         int khoang_cach=0.0344*(thoi_gian/2);
+         if(khoang_cach<10)
+         {
+             Serial.print(khoang_cach);
+         }
+         else if(khoang_cach==10)
+         {
+           Serial.print("a");
+         }
+          else if(khoang_cach==11)
+         {
+           Serial.print("b");
+         }
+          else if(khoang_cach==12)
+         {
+              Serial.print("c");
+         }
+          else if(khoang_cach==13)
+         {
+              Serial.print("d");
+         }
+           else if(khoang_cach==14)
+         {
+              Serial.print("e");
+         }
+           else if(khoang_cach==15)
+         {
+              Serial.print("f");
+         }
+           else if(khoang_cach==16)
+         {
+              Serial.print("g");
+         }
+         else if(khoang_cach==17)
+         {
+             Serial.print("h");
+         }
+       
        
       }
    
@@ -97,15 +129,4 @@ void convertIntToChar(int number)
      }
 }
 
-//Cảm biến siêu âm
-int CamBienSieuAm()
-{
-  int KHOANG_CACH;
-digitalWrite(chanphat,HIGH);
-delayMicroseconds(1000);
-digitalWrite(chanphat,LOW);
-thoigian=pulseIn(chanthu,HIGH);
-KHOANG_CACH=0.0344*(thoigian/2);
-return KHOANG_CACH;
-delay(500); 
-}
+
