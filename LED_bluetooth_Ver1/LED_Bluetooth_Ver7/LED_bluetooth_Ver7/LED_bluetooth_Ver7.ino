@@ -6,9 +6,10 @@ int thoigian,khoangcach;
 int count=0;
 char command;
 String test;
-#define led 4
+//#define led 4
 boolean check=false;
 #define Analog3 3
+
 int count1;
 int dem=0;
 

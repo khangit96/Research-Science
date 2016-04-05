@@ -17,21 +17,10 @@ digitalWrite(chanphat,LOW);
 thoigian=pulseIn(chanthu,HIGH);
 khoangcach=0.0344*(thoigian/2);
 
-Serial.print(khoangcach);
-Serial.println("cm");
-if(khoangcach==16||khoangcach==17)
-{
-  
- Serial.println("0ml");
-}
-else
-{
-  int khoangcach_fix=17-khoangcach;
-  int ml=(khoangcach_fix*500)/14;
-  Serial.println(ml);
-}
+Serial.println(khoangcach);
 
 
 
-delay(200);
+
+delay(1000);
 }
