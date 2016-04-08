@@ -16,7 +16,7 @@ String test;
 int count=0;
 boolean admin=false;
 boolean bomm = false;
-
+boolean checkSms=false;
 //********************************************
 #define Analog 5
 //*****************************************************
@@ -79,9 +79,6 @@ char *Reply1()
 /**********************************************************/
  int DO_AM_DAT()
 {
-  //int ana=analogRead(Analog);
-  //int anal=ana-223;
- // int doAmDat=100-(anal/800);
  float ana=analogRead(Analog);
  float anal=ana-223;
  float analog=anal/800;
@@ -106,10 +103,7 @@ void loop()
   
   
   int DO_AM_DAT1=DO_AM_DAT();
-  
-  //Gửi dữ liệu về  độ ẩm đất,nhiệt độ không khí qua android
-  
-  
+  Serial.println(DO_AM_DAT1);
   //Bluetooth
    while(Serial.available() > 0)
      {
@@ -137,7 +131,8 @@ void loop()
        digitalWrite(Bom,HIGH);
        digitalWrite(Van,HIGH);       
      }
-     
+    
+   /**Phần xử lý tin nhắn**/
   //Đọc tin nhắn
   pos=sms.IsSMSPresent(SMS_UNREAD);
   Serial.println((int)pos);
@@ -157,19 +152,21 @@ void loop()
           p=strstr(smsbuffer,"WATERING");//thì tìm kiếm chuổi WATERING trong nội dung tin nhắn
           p1=strstr(smsbuffer,"STOP");
           if(p)//nếu mà nội dung tin nhắn là WATERING 
-          {    admin=true;
+          {    sms.SendSMS(n,"Dang tuoi...");
+               admin=true;
                digitalWrite(Bom,LOW);//bơm nước
                digitalWrite(Van,LOW); 
+              
            
            
           }
-          else if(p1)
-          {
+          else if(p1)//Ngược lại nếu nội dung tin nhắn là STOP
+          {    sms.SendSMS(n,"Da dung.");
                admin=false;
                digitalWrite(Bom,HIGH);//bơm nước
                digitalWrite(Van,HIGH); 
           }
-          else//ngược lại nếu nội dung tin nhắn ko phải là WATERING
+          else//ngược lại nếu nội dung tin nhắn ko phải là WATERING và không phải là STOP
           {
              
                 p=strstr(smsbuffer,"CHANGE");//thì tìm kiếm chuổi CHANGE trong nội dung tin nhắn dùng để thay đổi nhiệt độ
@@ -179,13 +176,18 @@ void loop()
                 char changeNhietDo[163]="\0";//biến để lấy ra giá trị nhiệt độ từ nội dung tin nhắn thay đổi nhiệt độ
                 strncpy(changeNhietDo,smsbuffer+7,2);//cắt giá trị nhiệt độ từ trong nội dung chuổi tin nhắn
                 doAmDatCanTuoi=atoi(changeNhietDo);//gán doAmDatCanTuoi bằng với giá trị nhiệt độ cần thay đổi trong nội dung tin nhắn
-                sms.SendSMS(n,"Da thay doi");
-                //Serial.println(doAmDatCanTuoi);
-                delay(5000);
+                DO_AM_DAT1=doAmDatCanTuoi;
+               // sms.SendSMS(n,"Da thay doi thanh cong");
+                 sms.SendSMS(n, Reply(1,2,DO_AM_DAT1));
               }
          }
           
     }
+    
+    int POS=(int)pos;//biến lưu vị trí tin n
+    /**Thông báo đến người dùng xem tin nhắn đã gửi thành công hay chưa**/
+    
+     /**Phần xử lý việc bơm nước**/
     if (admin ==true)
     {
       count+=1;
@@ -212,8 +214,9 @@ void loop()
     }
    }
      
-    //Mái che
+  /**Phần xử lý mái che**/
   value= analogRead(Analog3);
+  
   if(value<=100)
   {
     digitalWrite(manChe,HIGH);
@@ -226,35 +229,13 @@ void loop()
     delay(1000);
 }
 
- //Hàm chuyển đổi số nguyên sang char và lấy độ dài  
-void convertIntToChar(int number)
-{
-    int count1=0;
-    char NUMBER[5];
-    itoa(number,NUMBER,10);
-    
-    //xác định độ dài của chuổi
-    for(int i=0;i<sizeof(NUMBER);i++)
-    {
-            if(NUMBER[i]!='\0')
-            {
-               count1+=1; 
-            }
-     }
-  delay(50);
-  //Gửi thông tin chuổi số đi
-  for(int i=0;i<sizeof(NUMBER);i++)
-    {
-            if(NUMBER[i]!='\0')
-            {
-               Serial.print(NUMBER[i]);  
-              delay(50); 
-            }
-     }
-}
+
+
+/**============================================================================CÁC HÀM XỬ LÝ========================================================**/
 //Hàm reset
 void Reset()
-{
+{  
+    sms.SendSMS(n,"Da tuoi thanh cong.");
     digitalWrite(Bom,HIGH);
     digitalWrite(Van,HIGH); 
     count=0;
@@ -262,7 +243,7 @@ void Reset()
 }
 
 void Reset1()
-{
+{  
     digitalWrite(Bom,HIGH);
     digitalWrite(Van,HIGH); 
     count=0;

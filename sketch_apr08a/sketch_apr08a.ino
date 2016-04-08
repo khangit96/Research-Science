@@ -1,4 +1,4 @@
-//************************************************
+f//************************************************
 #include <SoftwareSerial.h>
 #include<stdlib.h>
 #include <string.h>
@@ -28,7 +28,7 @@ boolean bomm = false;
 DHT dht(DHTPIN, DHTTYPE);
 
 //Mái che
-int value;
+int cuongDoAnhSang;
 #define Analog3 4
 #define manChe 8
 //******************************************
@@ -106,7 +106,7 @@ void loop()
   
   
   int DO_AM_DAT1=DO_AM_DAT();
-  
+  Serial.println(DO_AM_DAT1);
   //Gửi dữ liệu về  độ ẩm đất,nhiệt độ không khí qua android
   
   
@@ -157,17 +157,18 @@ void loop()
           p=strstr(smsbuffer,"WATERING");//thì tìm kiếm chuổi WATERING trong nội dung tin nhắn
           p1=strstr(smsbuffer,"STOP");
           if(p)//nếu mà nội dung tin nhắn là WATERING 
-          {    admin=true;
-               digitalWrite(Bom,LOW);//bơm nước
-               digitalWrite(Van,LOW); 
+          {     admin=true;
+               //Bật máy bơm
+              // BatMayBom();
            
            
           }
-          else if(p1)
+          else if(p1)//Ngược lại nếu nội dung tin nhắn là STOP
           {
                admin=false;
-               digitalWrite(Bom,HIGH);//bơm nước
-               digitalWrite(Van,HIGH); 
+               //Tắt máy bơm
+            //   TatMayBom();
+               
           }
           else//ngược lại nếu nội dung tin nhắn ko phải là WATERING
           {
@@ -180,78 +181,77 @@ void loop()
                 strncpy(changeNhietDo,smsbuffer+7,2);//cắt giá trị nhiệt độ từ trong nội dung chuổi tin nhắn
                 doAmDatCanTuoi=atoi(changeNhietDo);//gán doAmDatCanTuoi bằng với giá trị nhiệt độ cần thay đổi trong nội dung tin nhắn
                 sms.SendSMS(n,"Da thay doi");
-                //Serial.println(doAmDatCanTuoi);
-                delay(5000);
+                delay(50);
               }
          }
           
     }
+    
+    //
     if (admin ==true)
     {
-      count+=1;
-      if(count==20)
-      {
-        Reset();
-      } 
+          count+=1;
+          if(count==20)
+          {
+            Reset();
+          } 
     }
     else
-   { //Phần tưới tự động
-    if(DO_AM_DAT1<=50)//mỗi lần muốn tưới phải kiểm tra xem độ ẩm có lớn hơn 50% chưa(tức là đất phải khô mới tưới)
-       {   
-           bomm=true;
-           digitalWrite(Bom,LOW);
-           digitalWrite(Van,LOW); 
-       }
-   if (bomm ==true)
-    {
-      count+=1;
-      if(count==20)
-      {
-        Reset1();
-      } 
-    }
+     { //Phần tưới tự động
+          if(DO_AM_DAT1<=50)//mỗi lần muốn tưới phải kiểm tra xem độ ẩm có lớn hơn 50% chưa(tức là đất phải khô mới tưới)
+             {   
+                 bomm=true;
+                 //Bật máy bơm
+                 //BatMayBom();
+             }
+         if (bomm ==true)
+          {
+            count+=1;
+            if(count==20)
+            {
+              Reset1();
+            } 
+         }
    }
      
-    //Mái che
-  value= analogRead(Analog3);
-  if(value<=100)
-  {
-    digitalWrite(manChe,HIGH);
-  }
-  else
-  {
-    digitalWrite(manChe,LOW);
-  }
+  //Xử lý mái che
+   //XuLyMaiChe();
  
     delay(1000);
 }
 
+
+/**============================================================================CÁC HÀM XỬ LÝ========================================================**/
+
+
  //Hàm chuyển đổi số nguyên sang char và lấy độ dài  
-void convertIntToChar(int number)
+/*void convertIntToChar(int number)
 {
-    int count1=0;
-    char NUMBER[5];
-    itoa(number,NUMBER,10);
-    
-    //xác định độ dài của chuổi
-    for(int i=0;i<sizeof(NUMBER);i++)
-    {
-            if(NUMBER[i]!='\0')
-            {
-               count1+=1; 
-            }
-     }
-  delay(50);
-  //Gửi thông tin chuổi số đi
-  for(int i=0;i<sizeof(NUMBER);i++)
-    {
-            if(NUMBER[i]!='\0')
-            {
-               Serial.print(NUMBER[i]);  
-              delay(50); 
-            }
-     }
+        int count1=0;
+        char NUMBER[5];
+        itoa(number,NUMBER,10);
+        
+        //xác định độ dài của chuổi
+        for(int i=0;i<sizeof(NUMBER);i++)
+        {
+                if(NUMBER[i]!='\0')
+                {
+                   count1+=1; 
+                }
+         }
+      delay(50);
+      //Gửi thông tin chuổi số đi
+      for(int i=0;i<sizeof(NUMBER);i++)
+        {
+                if(NUMBER[i]!='\0')
+                {
+                   Serial.print(NUMBER[i]);  
+                  delay(50); 
+                }
+         }
 }
+
+
 //Hàm reset
 void Reset()
 {
@@ -260,7 +260,7 @@ void Reset()
     count=0;
     admin=false;
 }
-
+//Hàm reset1
 void Reset1()
 {
     digitalWrite(Bom,HIGH);
@@ -268,3 +268,31 @@ void Reset1()
     count=0;
     bomm=false;
 }
+
+//Hàm bật máy bơm nước
+void BatMayBom()
+{
+    digitalWrite(Bom,LOW);
+    digitalWrite(Van,LOW); 
+}
+
+//Hàm tắt máy bơm nước
+void TatMayBom()
+{
+    digitalWrite(Bom,HIGH);
+    digitalWrite(Van,HIGH); 
+}
+
+//Phần xử lý mái che
+void XuLyMaiChe()
+{
+    cuongDoAnhSang= analogRead(Analog3);
+    if(cuongDoAnhSang<=100)
+    {
+      digitalWrite(manChe,HIGH);
+    }
+    else
+    {
+      digitalWrite(manChe,LOW);
+    }
+}*/
