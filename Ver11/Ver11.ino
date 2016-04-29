@@ -17,6 +17,7 @@ char pos; //biến vị trí tin nhắn trong sim
 char command;
 String test;
 boolean checkBluetooth=false;
+String thayDoi;
 //--------------------------------
 int doAmMacDinh=50;//độ ẩm mặc định cần phải tưới
 //biến quyen admin
@@ -25,7 +26,7 @@ boolean bomm = false;
 int dem=0;
 int count=0;
 //********************************************
-#define Analog 1 //do am dat analog 5
+#define Analog 5 //do am dat analog 5
 #define Analog1 3 //kiem tra nuoc analog 3
 //*****************************************************
 #include "DHT.h"
@@ -37,7 +38,7 @@ DHT dht(DHTPIN, DHTTYPE);
 
 //Mái che
 int value;
-#define Analog2 0 // quang tro analog 4
+#define Analog2 4 // quang tro analog 4
 #define manChe 8 // manche digital 8
 //******************************************
 int tat=0;
@@ -89,39 +90,68 @@ void loop()
         command='\0';
      }
      //Bluetooth bắt đầu hoạt động
-     if(checkBluetooth==true)
+   if(checkBluetooth==true)
          {
            if(test=="1")//Bật máy bơm
            {
-           //   Serial.println("Bat may bom");
+            // Serial.println("Bat may bom");
               mo_bom();//bơm nước
            }
            else if(test=="2")//Tắt máy bơm
-           {
-             // Serial.println("Tat may bom");
+           { 
+             //Serial.println("Tat may bom");
               dong_bom();//bơm nước
            }
            else if(test=="3")//Kéo màn lại
            {
-             //Serial.println("Keo man lai");
+            //Serial.println("Keo man lai");
               digitalWrite(manChe,HIGH);
            }
            else if(test=="4")//Kéo màn ra
            {
-              //Serial.println("Keo man ra");
+             //Serial.println("Keo man ra");
               digitalWrite(manChe,LOW);
            }
-           else if(test!="")//Thay đổi độ ẩm
-           {  
-              //Serial.print("Do am da thay doi thanh cong");
-              //Serial.print(test);
+           else if(test=="h")//kiểm tra nếu người dùng chọn thay đổi độ ẩm
+           {
+             thayDoi=test;
            }
-           test="";
+           else if(test=="t")
+           {
+             thayDoi=test;
+              
+           }
+           else
+           {
+             if(test!="")
+             { 
+               if(thayDoi=="h")//thay đổi độ ẩm
+               {    doAmMacDinh=test.toInt();
+                    sms.SendSMS(n,Reply1(doAmMacDinh));
+                    thayDoi="";
+               }
+               if(thayDoi=="t")//thay đổi thời gian
+                { 
+                  thayDoi="";
+                }
+              
+             }
+             
+           }
+            test="";
            command='\0';
-   }
+           Serial.print("h");
+           delay(50);
+           convertIntToChar(DO_AM_DAT());
+           Serial.print("t");
+           delay(50);
+           convertIntToChar(NHIET_DO_KHONG_KHI());
+             
+     }
    else
    {
             //-------------------------------*Phần xử lý tin nhắn*--------------------------------
+            Serial.println(DO_AM_DAT());
        //Đọc tin nhắn
         pos=sms.IsSMSPresent(SMS_UNREAD);
         Serial.println((int)pos);
@@ -226,11 +256,11 @@ void Maiche()
   if(value<=100)
   {
     bat+=1;
-    if (bat==3)
+    if (bat==5)
     {
     digitalWrite(manChe,HIGH);
     }
-    if(bat>3) 
+    if(bat>5) 
     {
       bat=0;
     }
@@ -238,11 +268,11 @@ void Maiche()
   else
   {
       tat+=1;
-      if (tat==3)
+      if (tat==5)
       {
       digitalWrite(manChe,LOW);
       }
-       if(tat>3) 
+       if(tat>5) 
       {
       tat=0;
       }
@@ -340,5 +370,19 @@ void Auto ()
     }
    }
 }  
+ //Hàm chuyển đổi số nguyên sang char và lấy độ dài  
+void convertIntToChar(int number)
+{
+    char NUMBER[2];
+    itoa(number,NUMBER,10);
+  //Gửi thông tin chuổi số đi
+  for(int i=0;i<sizeof(NUMBER);i++)
+    {
+          
+               Serial.print(NUMBER[i]);  
+              delay(50); 
+           
+     }
+}
 //-----------------------------------------------------------------------------------------------
 

@@ -94,22 +94,22 @@ void loop()
          {
            if(test=="1")//Bật máy bơm
            {
-             Serial.println("Bat may bom");
+            // Serial.println("Bat may bom");
               mo_bom();//bơm nước
            }
            else if(test=="2")//Tắt máy bơm
            { 
-             Serial.println("Tat may bom");
+             //Serial.println("Tat may bom");
               dong_bom();//bơm nước
            }
            else if(test=="3")//Kéo màn lại
            {
-            Serial.println("Keo man lai");
+            //Serial.println("Keo man lai");
               digitalWrite(manChe,HIGH);
            }
            else if(test=="4")//Kéo màn ra
            {
-             Serial.println("Keo man ra");
+             //Serial.println("Keo man ra");
               digitalWrite(manChe,LOW);
            }
            else if(test=="h")//kiểm tra nếu người dùng chọn thay đổi độ ẩm
