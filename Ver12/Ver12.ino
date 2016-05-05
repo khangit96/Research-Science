@@ -143,12 +143,12 @@ void loop()
            }
             test="";
            command='\0';
-      /*     Serial.print("h");
+           Serial.print("h");
            delay(50);
            convertIntToChar(DO_AM_DAT());
            Serial.print("t");
            delay(50);
-           convertIntToChar(NHIET_DO_KHONG_KHI());*/
+           convertIntToChar(NHIET_DO_KHONG_KHI());
              
      }
    else

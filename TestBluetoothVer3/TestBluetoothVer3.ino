@@ -99,21 +99,23 @@ void loop()
                    WriteEEPROM(1,strMinute.toInt());
                    WriteEEPROM(2,strHour.toInt());
                    WriteEEPROM(3,strMinute.toInt());
-                   Serial.println(strHour.toInt());
-                   Serial.println(strMinute.toInt());
+                   WriteEEPROM(5,1);
+                 //  Serial.println(strHour.toInt());
+                  // Serial.println(strMinute.toInt());
+                  Serial.print("t");
                   thayDoi="";
                 }
                 else
                 { 
                     if(test=="r")
                     {
-                      
-                      
-                      Serial.println("Repeat");
+                      WriteEEPROM(4,1);
+                      Serial.print("r");
                     }
                     else if(test=="n")
                     {
-                      Serial.println("Not Repeat");
+                      WriteEEPROM(4,0);
+                      Serial.print("n");
                     }
                     else
                     {
@@ -149,7 +151,7 @@ void loop()
       
      }
      readDS1307();
-    digitalClockDisplay();
+    //digitalClockDisplay();
     int getHourToCompar=ReadEEPROM(0);
     int getMinuteToCompar=ReadEEPROM(1);
     //Kiểm tra nếu thời gian cài đặt tưới bằng thời gian hiện tại
@@ -157,13 +159,29 @@ void loop()
     {
       WriteEEPROM(0,0);
       WriteEEPROM(1,0);
-      Serial.println("equal");
+      WriteEEPROM(5,0);
+      Serial.print("e");
     }
-    if(ReadEEPROM(3)!=minute)
+    //Trường hợp tưới lặp lại theo thời gian
+     if(ReadEEPROM(3)!=minute)
     {
-      WriteEEPROM(0,ReadEEPROM(2));
-      WriteEEPROM(1,ReadEEPROM(3));
-      Serial.println("Not equal");
+      
+       if(ReadEEPROM(4)==1)
+      {
+         //Serial.println("Repeat");
+         WriteEEPROM(0,ReadEEPROM(2));
+         WriteEEPROM(1,ReadEEPROM(3));
+      }
+      else
+      {
+        if(ReadEEPROM(5)==0)
+        {
+         // Serial.println("Not Repeat");
+          WriteEEPROM(0,0);
+          WriteEEPROM(1,0);
+        }
+        
+      }
     }
      delay(1000);
 }
